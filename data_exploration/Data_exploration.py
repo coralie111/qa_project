@@ -31,11 +31,9 @@ def etendue_valeurs(input_series):
     else:
         return 'min: {:f}; max: {:f}'.format(input_series.min(), input_series.max())
 
-# file_paths = ['./train.csv']
 
-
-train = pd.read_csv('./train.csv')
-test = pd.read_csv('./test.csv')
+train = pd.read_csv('../data/train.csv')
+test = pd.read_csv('../data/test.csv')
 
 data = pd.concat([train, test])
 
@@ -48,4 +46,4 @@ for fn in fn_list:
     else:
         output_l.append(result)
 
-pd.concat(output_l).T.to_csv('output.csv', sep='|')
+pd.concat(output_l).T.to_csv('../output/output.csv', sep='|')
