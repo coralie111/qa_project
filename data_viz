@@ -4,4 +4,52 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 train = pd.read_csv('Data/train.csv')
-train
+
+train.info()
+
+# Distribution des valeurs des variables cibles
+
+train_d = pd.read_csv('Data/train.csv')
+targets = list(train_d.columns[11:])
+
+for col in targets:
+    train_d[col] = pd.cut(train_d[col],[-0.1, 0.25, 0.5, 0.75, 1.1],
+       labels = ['mauvais', 'moyen', 'moyen +', 'bon'])
+
+fig = plt.figure()
+
+for i in list(range(30)):
+    fig.add_subplot(30, 1, i+1)
+    sns.catplot(x=targets[i], data=train, kind='count')
+    plt.title(targets[i])
+    plt.show()
+
+# En fonction des catégories
+
+fig = plt.figure()
+
+for i in list(range(30)):
+    fig.add_subplot(30, 1, i+1)
+    sns.catplot(x=targets[i], col='category', data=train, kind='count')
+    plt.title(targets[i])
+    plt.show()
+
+# Valeurs des variables cibles (question/answer) en fonction des catégories
+
+targets_question = list(train.columns[11:32])
+targets_answer = list(train.columns[33:])
+
+fig = plt.figure(figsize = (7, 200))
+
+for i in list(range(len(targets_question))):
+    fig.add_subplot(30, 1, i+1)
+    sns.catplot(x='category', y=targets_question[i], kind='bar', data=train)
+    plt.show()
+    
+fig2= plt.figure(figsize = (7, 200))
+
+for i in list(range(len(targets_answer))):
+    fig2.add_subplot(30, 1, i+1)
+    sns.catplot(x='category', y=targets_answer[i], kind='bar', data=train)
+    plt.show()
+
