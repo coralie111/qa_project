@@ -6,18 +6,20 @@ sns.set()
 
 train = pd.read_csv('../data/train.csv')
 
-train.info()
+# train.info()
 
 g = sns.countplot('category', data=train)
 g.set_xticklabels(g.get_xticklabels(), rotation=30)
 g.set_title("instance's category distribution")
-plt.show()
+g.figure.savefig('../output/category.png')
+# plt.show()
 
 
 g = sns.countplot('host', data=train, order=train.host.value_counts().iloc[:6].index)
 g.set_xticklabels(g.get_xticklabels(), rotation=30)
 g.set_title("instance's category distribution")
-plt.show()
+g.figure.savefig('../output/host.png')
+# plt.show()
 
 train_d = train.copy()
 targets = list(train.columns[11:])
@@ -37,13 +39,15 @@ g = sns.catplot('value', col='variable', data=train_d_m[train_d_m.variable.isin(
                 kind='count', col_wrap=6)
 plt.subplots_adjust(top=0.9)
 g.fig.suptitle('answer type target countplot')
-plt.show()
+g.savefig('../output/answer_type_target.png')
+# plt.show()
 
 g = sns.catplot('value', col='variable', data=train_d_m[train_d_m.variable.isin(targets_question)],
                 kind='count', col_wrap=6)
 plt.subplots_adjust(top=0.9)
 g.fig.suptitle('question type target countplot')
-plt.show()
+g.savefig('../output/question_type_target.png')
+# plt.show()
 
 chunk_size = 3
 
@@ -51,11 +55,12 @@ for i in range(0, len(targets_answer), chunk_size):
     g = sns.catplot('value', row='category', col='variable',
                     data=train_d_m[train_d_m.variable.isin(targets_answer[i:i + chunk_size])],
                     kind='count')
-    plt.show()
-
+    g.savefig('../output/category_answer_{0}.png'.format(i))
+    # plt.show()
 
 for i in range(0, len(targets_question), chunk_size):
     g = sns.catplot('value', row='category', col='variable',
                     data=train_d_m[train_d_m.variable.isin(targets_question[i:i + chunk_size])],
                     kind='count')
-    plt.show()
+    g.savefig('../output/category_question_{0}.png'.format(i))
+    # plt.show()
