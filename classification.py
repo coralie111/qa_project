@@ -5,6 +5,7 @@ import scipy.sparse as sp
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.multioutput import MultiOutputClassifier
 from sklearn.model_selection import train_test_split
 
 
@@ -14,7 +15,8 @@ to_delete_var = ['qa_id', 'url',
                  'question_user_name', 'question_user_page',
                  'answer_user_name', 'answer_user_page']
 
-X_train, y_train = train.iloc[:, :11].drop(to_delete_var, 1), train.iloc[:, 11:]
+X_train = train.iloc[:, :11].drop(to_delete_var, 1)
+y_train = train.iloc[:, 11:]
 
 y_train_transformed = y_train.apply(lambda x: pd.cut(x,
                                                      [-0.1, .25, .5, .75, 1.1],
@@ -31,11 +33,15 @@ X_train_text = sp.hstack(X_train[text_var].apply(lambda col: vectorizer.fit_tran
 X_train_category = ohe.fit_transform(X_train[['category', 'host']])
 X_train_transformed = sp.hstack([X_train_text, X_train_category])
 
-X_train_train, X_train_test, y_train_train, y_train_test = train_test_split(X_train_transformed, y_train_transformed, test_size=0.2)
+X_train_train, X_train_test, y_train_train, y_train_test = train_test_split(X_train_transformed,
+                                                                            y_train_transformed,
+                                                                            test_size=0.15)
 
-dtc = DecisionTreeClassifier(max_depth=5).fit(X_train_train, y_train_train)
+dtc = DecisionTreeClassifier(max_depth=5)
+dtc_multi = MultiOutputClassifier(dtc, n_jobs=-1)
 
-dtc.score(X_train_test, y_train_test)
+dtc_multi.fit(X_train_train, y_train_train)
+dtc_multi.score(X_train_test, y_train_test)
 
 # tree interpretation
 
