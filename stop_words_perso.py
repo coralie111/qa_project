@@ -50,3 +50,12 @@ stop_words_to_remove = [
     'yourself',
     'yourselves'
     ]
+
+stop_words_update = [
+    'amp',
+    'gt', 
+    'lt', 
+    'div', 
+    'id',
+    'fi', 
+    'one']
