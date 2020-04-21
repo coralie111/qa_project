@@ -8,6 +8,7 @@ def do_and_stack_cosine(
     cosine_tfidftransformer,
     df_to_stack_to,
     df,
+    norm_transformer=None,
     norm=False
 ):
     title_cosine_transformed = cosine_tfidftransformer.transform(df.question_title)
@@ -43,9 +44,8 @@ def do_and_stack_cosine(
         )
     )
 
-    #tu peux mettre la normalisation ici
-    # if norm:
-    #     df_transformed = blabla(df_transformed)
+    if norm:
+        df_transformed = norm_transformer.transform(df_transformed)
 
     return df_transformed
 
